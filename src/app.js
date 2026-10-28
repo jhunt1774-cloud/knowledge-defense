@@ -4,12 +4,13 @@
   let bank=QuestionBank.validate(window.KD_SAMPLE_QUESTIONS),bag=[],sound=false,audio,editIndex=0,currentQuestion=null,afterQuestion=null;
   function el(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;}
   function button(text,action,cls){const b=el('button',text,cls);b.addEventListener('click',action);return b;}
+  function portrait(key,frame=0,width=64,height=76){const canvas=el('canvas');canvas.width=width*2;canvas.height=height*2;canvas.className='art-portrait';canvas.setAttribute('aria-hidden','true');const asset=KD_ASSETS[key],img=new Image();img.onload=()=>{const [x,y,w,h]=asset.frames[frame],scale=Math.min(canvas.width/w,canvas.height/h);canvas.getContext('2d').drawImage(img,x,y,w,h,(canvas.width-w*scale)/2,canvas.height-h*scale,w*scale,h*scale);};img.src=asset.data;return canvas;}
   function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
   function show(content){$('modal-body').replaceChildren(...content);S.blocked=true;if(!modal.open)modal.showModal();}
   function close(){modal.close();S.blocked=S.over||teacher.open;currentQuestion=null;afterQuestion=null;refresh();}
   function tone(kind){
     if(!sound)return;
-    try{audio??=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();if(kind==='shot'&&Math.random()>.12)return;const o=audio.createOscillator(),g=audio.createGain();const now=audio.currentTime;const f={shot:330,build:520,win:740,correct:880,wrong:190,hurt:120}[kind]||440;o.type=kind==='hurt'?'triangle':'sine';o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(f*(kind==='wrong'?.6:1.3),now+.12);g.gain.setValueAtTime(kind==='shot'?.018:.065,now);g.gain.exponentialRampToValueAtTime(.001,now+.18);o.connect(g);g.connect(audio.destination);o.start();o.stop(now+.2);}catch{sound=false;$('sound').textContent='Sound unavailable';}
+    try{if(window.KDAudio?.effect(kind))return;audio??=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();const shot=['shot','arrow','magic','cannon'].includes(kind);if(shot&&Math.random()>.18)return;const o=audio.createOscillator(),g=audio.createGain();const now=audio.currentTime;const f={shot:330,arrow:430,magic:660,cannon:110,build:520,win:740,correct:880,wrong:190,hurt:120}[kind]||440;o.type=kind==='hurt'||kind==='cannon'?'triangle':'sine';o.frequency.setValueAtTime(f,now);o.frequency.exponentialRampToValueAtTime(f*(kind==='wrong'?.6:1.3),now+.12);g.gain.setValueAtTime(shot?.018:.065,now);g.gain.exponentialRampToValueAtTime(.001,now+.18);o.connect(g);g.connect(audio.destination);o.start();o.stop(now+.2);}catch{sound=false;$('sound').textContent='Sound unavailable';}
   }
   function refresh(){
     $('gold').innerHTML=`${S.gold} <i>◆</i>`;$('hearts').innerHTML=`${S.lives} <i>♥</i>`;$('wave').textContent=`${S.wave} / 6`;$('accuracy').textContent=`${S.correct} / ${S.answered}`;
@@ -35,7 +36,7 @@
   }
   function intro(){
     const pills=el('div',undefined,'level-pills');['3 realms','18 waves','32 questions'].forEach(t=>pills.append(el('span',t)));
-    show([el('span','WELCOME, CASTLE GUARDIAN','eyebrow'),el('div','♜ ✦ ♜','banner-art'),el('h2','Defend the Algorithm Kingdom.'),el('p','Monsters are marching toward the royal archive. Build towers, answer computer science questions, and turn your knowledge into gold.'),pills,el('p','Start with 180 gold. Choose a tower card, then a numbered platform to build. Send a wave when ready. Study for more gold whenever you need it. Questions always pause combat.'),button('Begin expedition →',close,'primary wide'),button('Read the field guide',()=>help(true),'wide subtle')]);
+    show([el('span','WELCOME, CASTLE GUARDIAN','eyebrow'),portrait('castles',0,110,150),el('h2','Defend the Algorithm Kingdom.'),el('p','Monsters are marching toward the royal archive. Build towers, answer computer science questions, and turn your knowledge into gold.'),pills,el('p','Start with 180 gold. Choose a tower card, then a numbered platform to build. Send a wave when ready. Study for more gold whenever you need it. Questions always pause combat.'),button('Begin expedition →',close,'primary wide'),button('Read the field guide',()=>help(true),'wide subtle')]);
   }
   function help(fromIntro=false){
     const list=el('ol',undefined,'instructions');[
@@ -66,13 +67,14 @@
   $('export-csv').onclick=()=>download('knowledge-defense-questions.csv',QuestionBank.toCSV(bank),'text/csv;charset=utf-8');
   $('export-pack').onclick=()=>download('knowledge-defense-classroom.json',JSON.stringify({version:1,settings:{frequency:S.frequency,difficulty:S.difficulty},questions:bank},null,2),'application/json');
   $('frequency').onchange=e=>{S.frequency=e.target.value;S.questionClock=0;msg('Question frequency updated. Export a classroom pack to keep it.');};$('difficulty').onchange=e=>{S.difficulty=e.target.value;msg('Challenge updated starting with the next wave.');};
-  for(const [type,t]of Object.entries(C.towers)){const b=button('',()=>S.choose(type),'tower-card');b.id='tower-'+type;b.setAttribute('aria-pressed',String(type===S.build));const info=el('span');info.append(el('b',t.name),el('small',t.detail));b.append(el('span',t.symbol,'symbol'),info,el('span',t.cost+' ◆','cost'));$('tower-cards').append(b);}
+  for(const [type,t]of Object.entries(C.towers)){const b=button('',()=>S.choose(type),'tower-card');b.id='tower-'+type;b.setAttribute('aria-pressed',String(type===S.build));const info=el('span');info.append(el('b',t.name),el('small',t.detail));b.append(portrait({archer:'ranger',mage:'mage',cannon:'cannon'}[type]),info,el('span',t.cost+' ◆','cost'));$('tower-cards').append(b);}
   for(let i=0;i<12;i++){const b=button(String(i+1),()=>S.selectSite(i));b.id='site-'+i;$('sites').append(b);}
   $('start').onclick=S.startWave;$('upgrade').onclick=S.upgrade;$('sell').onclick=S.sell;$('quiz').onclick=()=>ask();$('pause').onclick=()=>{S.paused=!S.paused;refresh();};$('speed').onclick=()=>{S.speed=S.speed===1?2:1;refresh();};$('help').onclick=()=>help();$('teacher').onclick=openTeacher;$('close-teacher').onclick=closeTeacher;
-  $('sound').onclick=()=>{sound=!sound;$('sound').textContent='Sound: '+(sound?'on':'off');$('sound').setAttribute('aria-pressed',String(sound));tone('build');};
+  $('sound').onclick=()=>{sound=!sound;window.KDAudio?.enable(sound);$('sound').textContent='Sound: '+(sound?'on':'off');$('sound').setAttribute('aria-pressed',String(sound));tone('build');};
   $('restart').onclick=()=>{show([el('h2','Start a fresh expedition?'),el('p','This resets your towers, gold, waves, and review totals. Your current question bank and teacher settings stay available.'),button('Restart expedition',()=>{modal.close();currentQuestion=null;S.reset();},'primary wide'),button('Keep playing',close,'wide subtle')]);};
   modal.addEventListener('cancel',e=>{e.preventDefault();if(!currentQuestion&&!S.over)close();});teacher.addEventListener('cancel',e=>{e.preventDefault();closeTeacher();});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&S.running){S.paused=true;refresh();}});
+  $('music-toggle').onchange=e=>{window.KDAudio.music(e.target.checked);$('music-status').textContent=e.target.checked?'Background music':'Music off';};
   window.KDUI={refresh,ask,end,tone,getBank:()=>JSON.parse(JSON.stringify(bank))};
   refresh();intro();
 })();
