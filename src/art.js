@@ -4,8 +4,9 @@ window.KDArt={
   preload(scene){
     const data=window.KD_ASSETS;
     if(!data)throw Error('The illustrated asset bundle is missing.');
-    const label=scene.add.text(450,285,'SUMMONING THE KINGDOM…',{fontFamily:'Georgia',fontSize:'20px',color:'#ebc77f'}).setOrigin(.5);
-    const track=scene.add.rectangle(450,325,280,4,0x34554a),bar=scene.add.rectangle(310,325,0,4,0xebc77f).setOrigin(0,.5);
+    const x=scene.scale.width/2,y=scene.scale.height/2;
+    const label=scene.add.text(x,y-20,'SUMMONING THE KINGDOM…',{fontFamily:'Georgia',fontSize:'20px',color:'#ebc77f'}).setOrigin(.5);
+    const track=scene.add.rectangle(x,y+20,280,4,0x34554a),bar=scene.add.rectangle(x-140,y+20,0,4,0xebc77f).setOrigin(0,.5);
     scene.load.on('progress',p=>bar.width=280*p);
     scene.load.once('complete',()=>{label.destroy();track.destroy();bar.destroy();});
     for(const [key,asset] of Object.entries(data))scene.load.image(key,asset.data);

@@ -3,7 +3,7 @@
   'use strict';
   const C=KDCore;
   const S=window.KD={level:0,wave:0,gold:180,lives:20,correct:0,answered:0,kills:0,running:false,paused:false,blocked:true,speed:1,selected:-1,build:'archer',frequency:'30',difficulty:'standard',questionClock:0,over:false,towers:[],enemies:[],shots:[],pending:0,spawnClock:0};
-  let scene,terrain,decor,rangeLayer,sitesLayer,castle,fx,enemyId=0;
+  let scene,terrain,decor,rangeLayer,sitesLayer,castle,fx,background,enemyId=0;
   const notify=()=>window.KDUI?.refresh();
   function hint(t){document.getElementById('hint').textContent=t;}
   const tone=(type)=>window.KDUI?.tone(type);
@@ -13,8 +13,14 @@
     create(){
       scene=this;terrain=this.add.graphics();decor=this.add.graphics();rangeLayer=this.add.graphics().setDepth(5);sitesLayer=this.add.graphics().setDepth(55);fx=this.add.graphics();
       this.makeTextures();this.loadMap();
-      this.input.on('pointerdown',p=>{if(S.blocked||S.over)return;const sites=C.maps[S.level].sites;const index=sites.findIndex(s=>Math.hypot(s[0]-p.x,s[1]-p.y)<35);if(index>=0)S.selectSite(index);});
+      this.scale.on('resize',()=>this.fitBoard());this.fitBoard();
+      this.input.on('pointerdown',p=>{if(S.blocked||S.over)return;const world=this.cameras.main.getWorldPoint(p.x,p.y);const sites=C.maps[S.level].sites;const index=sites.findIndex(s=>Math.hypot(s[0]-world.x,s[1]-world.y)<35);if(index>=0)S.selectSite(index);else if(S.selected>=0){S.selected=-1;this.drawSites();notify();}});
       S.ready=true;notify();
+    }
+    fitBoard(){
+      const width=this.scale.width,height=this.scale.height,zoom=Math.min(width/950,height/650);
+      this.cameras.main.setZoom(zoom).centerOn(450,300);
+      if(background){const source=background.texture.getSourceImage(),scale=Math.max((width/zoom+4)/source.width,(height/zoom+4)/source.height);background.setDisplaySize(source.width*scale,source.height*scale);}
     }
     makeTextures(){
       KDArt.register(this);
@@ -28,7 +34,7 @@
       const map=C.maps[S.level];S.path=C.pathInfo(map.path);terrain.clear();decor.clear();sitesLayer.clear();rangeLayer.clear();
       this.children.list.filter(o=>o.getData?.('maplabel')||o.getData?.('worldart')).forEach(o=>o.destroy());
       const mark=o=>o.setData('worldart',true);
-      mark(this.add.image(450,300,['emerald','moonlit','obsidian'][S.level]).setDisplaySize(900,600).setDepth(-20));
+      background=mark(this.add.image(450,300,['emerald','moonlit','obsidian'][S.level]).setDisplaySize(900,600).setDepth(-20));this.fitBoard();
       // Draw the exact gameplay route with painted cobbles. Keeping the collision
       // path and the texture stroke on the same coordinates avoids off-road units.
       const key='road-'+S.level;
@@ -48,7 +54,6 @@
       const castle=mark(this.add.image(818,endY+29,'castles',S.level).setOrigin(.5,1));castle.setScale(153/castle.frame.height).setDepth(100+endY+29);
       const portal=mark(this.add.image(28,map.path[0][1]+14,'portal',0).setOrigin(.5,.89));portal.setScale(105/portal.frame.height).setDepth(100+map.path[0][1]);
       this.drawSites();
-      const title=this.add.text(25,20,['THE EMERALD WILDS','THE SILVER RIVER','THE ASHEN HIGHLANDS'][S.level],{fontFamily:'Georgia',fontSize:'12px',color:'#fff1c7',stroke:'#1b3029',strokeThickness:3}).setDepth(950).setAlpha(.9);title.setData('maplabel',true);
     }
     drawSites(){
       sitesLayer.clear();rangeLayer.clear();const map=C.maps[S.level];
@@ -111,5 +116,5 @@
   S.reset=()=>{clearBoard();Object.assign(S,{level:0,gold:180,lives:20,kills:0,answered:0,correct:0,blocked:false,speed:1,build:'archer'});scene.loadMap();notify();hint('Choose a tower, then an empty stone platform.');};
   S.redraw=()=>scene?.drawSites();
   if(typeof Phaser==='undefined'){document.getElementById('game').textContent='The bundled Phaser file is missing. Restore vendor/phaser.min.js from the project package.';return;}
-  S.game=new Phaser.Game({type:Phaser.CANVAS,parent:'game',width:900,height:600,backgroundColor:'#315c46',antialias:true,transparent:false,render:{pixelArt:false,roundPixels:true},fps:{target:30,forceSetTimeOut:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},scene:Battle,audio:{noAudio:true},banner:false});
+  S.game=new Phaser.Game({type:Phaser.CANVAS,parent:'game',width:window.innerWidth,height:window.innerHeight,backgroundColor:'#315c46',antialias:true,transparent:false,render:{pixelArt:false,roundPixels:true},fps:{target:30,forceSetTimeOut:true},scale:{mode:Phaser.Scale.RESIZE,autoCenter:Phaser.Scale.NO_CENTER},scene:Battle,audio:{noAudio:true},banner:false});
 })();
