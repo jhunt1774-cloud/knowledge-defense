@@ -1,0 +1,43 @@
+topic,prompt,a,b,c,d,answer,explanation
+"Algorithms","A robot must move forward twice and then turn left. Which algorithm matches the goal?","Forward, turn left, forward","Forward, forward, turn left","Turn left, forward, forward","Forward, forward, turn right","B","Order matters. The two forward steps must happen before the left turn."
+"Loops","What is the final value of steps?
+steps ← 0
+REPEAT 4 TIMES { steps ← steps + 2 }","2","4","6","8","D","The loop adds 2 four times: 0 → 2 → 4 → 6 → 8."
+"Variables","score ← 5
+score ← score + 3
+score ← score * 2
+What is score now?","16","11","10","13","A","First score becomes 8. Then 8 multiplied by 2 is 16."
+"Conditionals","A game says: IF lives > 0, keep playing; ELSE, end the game. What happens when lives is 0?","One life is added","The game keeps playing","The game ends","The score doubles","C","0 > 0 is false, so the ELSE branch runs and ends the game."
+"Events","Which is an example of event-driven behavior?","A sprite jumps when the space bar is pressed","A list stores four names","A variable holds the number 12","A comment explains a loop","A","A key press is an event. The program responds by running the jump behavior."
+"Debugging","A character should move 10 steps, but moves 100. What is the best first debugging step?","Delete the whole program","Add random commands","Inspect the movement value and test a smaller example","Change the background color","C","Compare the expected and actual behavior, inspect the relevant value, and test one change at a time."
+"Boolean logic","Which expression is true when temperature is 22?","temperature < 10","temperature = 30","temperature > 25","temperature >= 20 AND temperature <= 25","D","22 is at least 20 and at most 25, so both parts of the AND expression are true."
+"Loops","Which is the clearest way to draw a square using move and right-turn commands?","Repeat 3 times: move, turn right 90°","Repeat 4 times: move, turn right 90°","Move once, turn right 45°","Repeat forever: turn right","B","A square has four equal sides and four right-angle turns."
+"Functions","Why create a function called drawStar()?","To make every variable a string","To prevent all possible bugs","To reuse a named group of instructions","To stop the program from using loops","C","A function gives a reusable set of instructions a name, reducing repeated code."
+"Parameters","A function drawPolygon(sides) uses sides to choose how many edges to draw. What is sides?","An event","A parameter","An error message","An output device","B","A parameter is an input to a function that lets it work with different values."
+"Lists","A list contains [""oak"", ""pine"", ""maple""]. After appending ""birch"", how many items are in the list?","2","3","5","4","D","Appending adds one item to the end. Three items plus one makes four."
+"Abstraction","A map shows roads but leaves out individual blades of grass. Which CS idea does this illustrate?","Abstraction","An infinite loop","A syntax error","A password attack","A","Abstraction keeps details useful for a purpose while hiding unnecessary details."
+"Binary","Using place values 8, 4, 2, 1, what decimal number does binary 1010 represent?","5","10","12","9","B","The 1 bits select 8 and 2. Their sum is 10."
+"Data","Which data would be most useful for finding the most popular lunch choice?","The color of the cafeteria walls","The school street address","A count of students choosing each meal","The number of tables only","C","Counts for each meal directly answer which choice is most popular."
+"Networks","Why can a message be divided into packets before traveling across the internet?","Each packet is always a complete website","Packets cannot travel through routers","Packets remove the need for addresses","Smaller pieces can be routed and reassembled at the destination","D","Packets carry pieces of data across networks and can be reassembled by the receiving system."
+"Cybersecurity","Which is the strongest password practice?","Reuse one short password everywhere","Use a long unique passphrase for each account","Share passwords with classmates","Use your first name and birthday","B","Long, unique passphrases reduce guessing risk and limit harm if one account is compromised."
+"Digital citizenship","An app asks for your exact location, but only needs to show a calculator. What is a sensible response?","Question the request and deny unnecessary access","Post your location publicly","Give it every permission","Share your password too","A","Grant only permissions that make sense for the app’s purpose, and ask a trusted adult when uncertain."
+"Conditionals","coins ← 12
+IF coins >= 10 { coins ← coins - 10 }
+What is the final value of coins?","22","12","2","10","C","12 is greater than or equal to 10, so the program subtracts 10 and leaves 2."
+"Boolean logic","A gate opens if hasKey OR knowsCode is true. You have no key but know the code. What happens?","The gate stays closed","The program crashes","Both conditions must be true","The gate opens","D","OR is true when at least one condition is true. Knowing the code is enough."
+"Algorithms","Which instruction is most precise for a robot?","Go over there","Move forward 3 tiles","Do something useful","Move a little","B","A direction and an exact number of tiles remove ambiguity."
+"Loops","x ← 1
+REPEAT 3 TIMES { x ← x * 2 }
+What is x?","6","3","8","9","C","The values are 1 → 2 → 4 → 8. The loop doubles x three times."
+"Debugging","A loop never ends. Which issue should you look for?","Its condition never becomes false","Its variable name is too short","It contains a comment","Its background is dark","A","If the loop depends on a condition, something must eventually make that condition false."
+"Variables","Which value is best represented as a Boolean?","A player’s name","Whether a door is locked","A list of high scores","A distance in meters","B","A Boolean represents true or false. A door can be locked (true) or not locked (false)."
+"Testing","A ticket is free for ages under 5. Which pair best tests the boundary?","Ages 20 and 30","Ages 10 and 12","Ages 4 and 5","Ages 1 and 2","C","4 is just below the boundary; 5 is at it. These cases check whether “under 5” is handled correctly."
+"Functions","A function returns the larger of two inputs. What should maxOf(7, 4) return?","11","4","3","7","D","7 is the larger input. Returning a value gives the result back to the calling code."
+"Accessibility","Which design helps more people use a game?","Show instructions only through sound","Use tiny text for every button","Provide readable labels and keyboard controls","Use color alone to show every state","C","Readable labels and keyboard alternatives help people with different devices and abilities."
+"Data representation","Why do computers use agreed encoding rules for text?","To map characters to values that can be stored and exchanged","To make every file the same size","To avoid storing any bits","To turn every word into a password","A","An encoding defines how characters correspond to stored values so systems can interpret the text."
+"Problem solving","You need to build a large game. What is an example of decomposition?","Add all features at once","Split the work into movement, scoring, and collision tasks","Never test individual features","Copy the same code into every screen","B","Decomposition breaks a large problem into smaller, more manageable parts."
+"Lists","A playlist starts with 5 songs. You remove 2 songs and add 1. How many remain?","2","3","4","8","C","5 - 2 + 1 = 4 songs."
+"Events","A button’s click handler adds 1 to clicks. clicks starts at 0. After three clicks, what is clicks?","0","1","2","3","D","Each click triggers the handler once, so three clicks add 3."
+"Algorithms","Two algorithms give the same correct answer. One uses many fewer steps on a large input. What advantage does it have?","Better efficiency","Guaranteed prettier graphics","No need for testing","Unlimited memory","A","Efficiency concerns resources such as the steps or time needed to solve a problem."
+"Conditionals","IF points >= 100 { show ""Gold"" } ELSE { show ""Silver"" }
+What appears when points is exactly 100?","Silver","Gold","Both messages","Neither message","B","The >= operator includes equality. 100 >= 100 is true."
