@@ -1,83 +1,70 @@
-# Knowledge Defense
+# Knowledge Defense — Study Edition
 
-A separate, complete Phaser 3 tower-defense review game. Defend the royal archive through **three realms and 18 waves**, including three bosses. Original graphics are drawn locally by Phaser; sounds are synthesized by the browser. **No account, backend, analytics, cookies, local storage, or saved progress.** This project has no dependency on Forest Path.
+A standalone Phaser 3 computer-science review game. **Answering questions powers the defense.** Questions remain at the bottom of the screen, one after another, while the battle runs above. No login, backend, analytics, saved progress, or asset CDN is required. Forest Path is a separate project and was not changed.
 
 ## Play
 
-Open `index.html` in Chrome, Edge, or a current Chromium-based Chromebook browser. Everything needed is included, so double-clicking the file also works. For a local website preview, install Node.js and run `node serve.cjs` in this folder, then visit **http://127.0.0.1:8080**. No package installation is needed to play or serve.
+Extract the game ZIP and open **index.html** in Chrome or Edge. For a local website preview, run `node serve.cjs` from the source project and visit http://127.0.0.1:8080 . No dependency installation is needed to play.
 
-1. Choose a tower card and click/tap a numbered stone platform to build. You start with 180 gold.
-2. Send a wave when ready. Towers attack automatically; building remains available in combat.
-3. Select an existing tower to see its range, upgrade it (up to level 3), or sell it for 65% of its total investment, rounded down.
-4. Study for gold at any time. Correct answers earn **60 gold**; incorrect answers earn **15 effort gold** and an explanation. Questions pause all combat. The question order and answer positions are shuffled.
-5. Survive six waves to unlock the next realm. Towers reset at realm transitions; remaining gold carries over, you receive 160 extra gold, and the castle recovers up to 6 health (maximum 20). Each realm ends with a boss. Defeat all three bosses to win.
+1. Begin expedition. Two starter towers are already placed and the firing reserve is empty.
+2. Answer the question at the bottom. Your first correct answer starts the first wave.
+3. Each correct answer gives **12 seconds of firing time to all towers** and **25 gold**. The reserve holds up to 36 seconds and drains only during engagements. Wrong answers add neither charge nor gold and show an explanation.
+4. Keep answering. Questions advance automatically, including during build phases and the four-second intermission between waves. When the reserve runs out, towers stop firing and monsters slow to 38% speed, giving you time to recharge.
+5. Choose a tower type and click a foundation to build. Select an existing tower to upgrade it up to level 3 or sell it. Rangers fire quickly, arcane spires slow enemies, and cannons deal splash damage.
+6. Defend six waves in each of three realms. Each realm ends with a boss. The next realm gives two new starter towers and 120 gold; unspent gold carries over, and the castle recovers up to 6 health. Charge resets, so every realm requires more correct answers.
 
-Rangers offer fast single-target damage. Arcane spires slow enemies by 50% for 2 seconds. Cannons deal splash damage within a 65-unit radius. Enemies award a small amount of gold; cleared waves award additional gold. Bosses deal 5 castle damage when they reach the archive; other monsters deal 1.
+Use **Pause & read** to stop both the battle and question advancement when more thinking time is needed. **1–4** answer the question; **Q/W/E** select tower types; **Space** pauses when focus is not on a button. All main controls also support mouse, touch, and Tab/Enter. Open **Sites** for numbered keyboard placement buttons.
 
-All controls work with mouse/touch or keyboard **Tab, Shift+Tab, Enter, Space**. Numbered site buttons below the tower cards duplicate the map controls. Use Pause to stop time and Speed to switch 1×/2×. Switching tabs pauses the battle until Resume is clicked. Sound starts off; enable it with the Sound button. On narrow screens the tower controls move below the battlefield.
+Sound effects and quiet background music start after Begin expedition. Menu contains mute, volume, music, help, speed, full-screen mode, teacher tools, and restart. The built-in audio works without extra files. Optional ElevenLabs MP3s in `assets/audio/` replace the matching sounds when installed.
 
 ## Teacher workshop
 
-Teacher tools are deliberately open to everyone: this is a practice game, not a locked assessment.
+Open **Menu → Teacher tools**. This is openly accessible practice software, not a locked assessment.
 
-- Set questions to every **15, 30, or 45 battle seconds**, **before each wave**, or **manual study only**. The default is 30 battle seconds. At 2× speed, battle time passes twice as quickly. Manual Study is always available and has no limit.
-- Select **Apprentice**, **Guardian**, or **Archmage** difficulty. Difficulty changes enemy health for enemies spawned in subsequent waves; the current wave keeps its existing specification.
-- Select a question to edit its topic, prompt, four answer choices, correct answer, and explanation. Click **Apply question** to include changes in the active bank. New questions must also be applied before export. At least one question must remain; at most 500 are accepted.
-- **Import JSON / CSV** replaces the active bank after all questions validate. An invalid file leaves the previous bank unchanged. Files are processed locally and must be smaller than 2 MB.
-- **Export JSON / CSV** downloads the active bank. **Export classroom pack** includes the bank and your frequency/difficulty settings; import that JSON pack next class to restore both.
-- All edits live in the current tab. Reloading starts with the original sample questions and default settings. Export before closing. A game restart preserves the current bank and teacher settings in this tab.
+- Choose **8, 12, 16, or 20 firing seconds** per correct answer. Questions are always continuous; the former occasional-question frequency setting is gone.
+- Choose Apprentice, Guardian, or Archmage challenge. Difficulty changes apply from the next wave.
+- Select questions to edit, add, or delete. Click **Apply question** before exporting. Banks need 1–500 valid questions with exactly four different choices each.
+- Import JSON or CSV to replace the bank. Invalid files leave the current bank unchanged. Files are processed locally, with a 2 MB limit.
+- Export JSON/CSV for questions, or **Export classroom pack** for questions plus the firing reward and difficulty. Edits last in this tab; export to keep them before closing.
+- Importing a new bank immediately replaces the live question. Questions cycle through the shuffled bank before repeating.
 
-For a class, distribute the same exported bank/pack and have it imported on each device. To change the questions included in your deployed site, replace the array assigned to `window.KD_SAMPLE_QUESTIONS` in `data/questions.js` with your exported JSON `questions` array; keep the assignment and semicolon. No student information is collected.
+The default bank contains **32 original middle-school CS questions**, covering algorithms, loops, variables, events, functions, conditionals, lists, binary, networks, debugging, privacy, and related topics. They are not copied from or endorsed by Code.org. Repetition after the first pass is intentional review; larger banks can be imported.
 
-### JSON bank format
+## Question-bank formats
 
-See `data/sample-bank.json`. Accepts a top-level array or an object containing `questions`. JSON `answer` is **zero-based** (0=A, 1=B, 2=C, 3=D). Exactly four different nonempty choices are required.
+JSON accepts an array or an object with `questions`. The answer index is **zero-based**: 0=A, 1=B, 2=C, 3=D.
 
 ```json
-{"version":1,"questions":[{"topic":"Loops","prompt":"What is 2 + 2?","choices":["3","4","5","6"],"answer":1,"explanation":"Adding two and two gives four."}]}
+{"version":2,"settings":{"powerReward":12,"difficulty":"standard"},"questions":[{"topic":"Loops","prompt":"What is 2 + 2?","choices":["3","4","5","6"],"answer":1,"explanation":"Adding two and two gives four."}]}
 ```
 
-Classroom packs additionally contain `"settings":{"frequency":"30","difficulty":"standard"}`. Valid frequencies: `"15"`, `"30"`, `"45"`, `"wave"`, `"manual"`. Valid difficulties: `"relaxed"`, `"standard"`, `"expert"`.
+Settings are optional. Valid reward values are 8, 12, 16, 20; difficulties are `relaxed`, `standard`, `expert`. Earlier question banks still import; old frequency settings do not disable continuous review.
 
-### CSV bank format
-
-See `data/sample-bank.csv`. Use these column names (order may vary):
+CSV uses **A/B/C/D** for the answer:
 
 ```csv
 topic,prompt,a,b,c,d,answer,explanation
 Loops,What is 2 + 2?,3,4,5,6,B,Adding two and two gives four.
 ```
 
-CSV `answer` is **A, B, C, or D**. Quote fields containing commas/newlines; double any embedded quotation marks. UTF-8 and a UTF-8 BOM are supported. CSV includes questions only; use the classroom JSON pack for settings. Text is rendered as text, never interpreted as HTML.
+Quote fields containing commas or newlines and double embedded quotation marks. UTF-8, BOM, and multiline fields are supported. See `data/sample-bank.json` and `data/sample-bank.csv`. All imported text is rendered as text, not HTML.
 
-## Deploy to GitHub Pages — separate project
+## GitHub Pages upload
 
-1. Create a **new repository**, for example `knowledge-defense`. Do not upload into or change your Forest Path repository.
-2. Upload this folder's **contents** to the root of the new repository. `index.html`, `style.css`, `src/`, `data/`, and `vendor/` must retain their relative locations. `.nojekyll` is included. No build is needed. Tests, README, and preview server may be uploaded too but are not required at runtime.
-3. In the repository's **Settings → Pages**, choose **Deploy from a branch**, select the main branch and **/(root)**, then Save.
-4. When GitHub finishes publishing, open the URL it provides (normally `https://YOUR-NAME.github.io/knowledge-defense/`). Share that URL with students.
+Use the **Study Edition GitHub upload ZIP**. Extract it first, then upload its **contents** to the root of your existing separate Knowledge Defense repository. Keep the `src`, `data`, `vendor`, and `assets` folders. Include **review.css**, **fullscreen.css**, and the updated **index.html**. Upload the new assets/data files to get the new maps.
 
-All runtime asset paths are relative so repository subpaths work. Phaser **3.90.0** is bundled in `vendor/phaser.min.js`; students never fetch Phaser from a CDN. After the initial page and assets load, the running game needs no network. Offline re-opening of the hosted URL is not guaranteed because there is no service worker; use the extracted folder for dependable offline play.
+In repository Settings → Pages, use Deploy from a branch with your main branch and /(root). After Pages deploys, press **Ctrl+Shift+R**. Each upload file is small; the large original-art source images are not required to run the website. Updated script and stylesheet URLs carry version tags.
 
-## Files and maintenance
+The source project uses `assets-bundle.js`; the ready-to-upload package splits the same art into `assets/data/*.js`. All paths are relative and the game also works from a local folder. Existing optional audio files can remain in `assets/audio/`.
 
-- `index.html`, `style.css`: responsive game interface and dialogs.
-- `src/game.js`: Phaser scene, generated art, waves, combat, campaign state.
-- `src/core.js`: map paths, tower stats, upgrade math, wave specifications (shared with tests).
-- `src/bank.js`: reusable JSON/CSV bank validation and conversion (independent of Phaser).
-- `src/app.js`: questions, teacher editor, import/export, audio, and UI.
-- `data/questions.js`: runtime sample bank; JSON and CSV samples contain the same questions.
-- `vendor/`: bundled Phaser engine and its MIT license.
-- `tests/`: data/mechanics checks and actual-browser regression checks.
+## Artwork and source files
 
-The samples are **32 original questions** about algorithms, loops, variables, events, conditionals, lists, functions, binary, networks, privacy, debugging, and more. They follow common middle-school CS concepts and are **not copied from, affiliated with, or endorsed by Code.org**.
+Three new guide-based paintings include their own curved roads, bridges, terrain, and landmarks: **Bramblewood Ruins**, **Moonstone Causeway**, and **The Ember Rift**. Routes and tower sites were checked against the artwork. Creature and tower sprites share an elevated three-quarter view. Open `art-gallery.html` to inspect them.
+
+The original map PNGs and prompts are retained in the source project's `assets/maps/` and `assets/STUDY-MAP-PROMPTS.json`. Runtime WebP art is locally bundled. Original code and questions use the MIT license; Phaser's MIT license is in `vendor/PHASER-LICENSE.txt`.
 
 ## Verification
 
-Run `npm test` (Node.js only) for bank, CSV, path, economy, and scaling tests. To run browser tests, run `npm install`, start `node serve.cjs` in another terminal, then run `npm run test:browser`. Browser tests use installed Chrome on Windows or Playwright Chromium; if necessary run `npx playwright install chromium` first. See `TEST-REPORT.md` for the checks actually run on this delivery.
+Run `npm test` for the seven data/mechanics checks. After installing development dependencies with `npm install`, run `npm run test:browser` for the Study Edition UI and resource-dependency regression and `npm run test:campaign` for the answer-paced campaign simulation. Chrome is used when installed, otherwise Playwright Chromium is needed.
 
-The canvas uses a fixed 900×600 logical resolution, a 30 FPS target, capped frame delta, and no physics engine, downloaded art, music, or external fonts. This keeps rendering modest for older Chromebooks. Actual school hardware still needs a classroom pilot. DOM controls and questions support keyboard use; the battlefield itself is visual and is not a fully screen-reader-equivalent game.
-
-## License
-
-Original project code, questions, and generated vector artwork: MIT, see `LICENSE`. Phaser: MIT, see `vendor/PHASER-LICENSE.txt`.
+See **STUDY-LOOP-UPDATE.md** for the actual checks and simulated answer cadences. Browser and signal tests do not replace student playtesting, listening checks on classroom equipment, or an older Chromebook pilot. The battlefield is visual and has keyboard controls, but is not a fully nonvisual game.
