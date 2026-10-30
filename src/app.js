@@ -26,8 +26,9 @@
     const begin=$('begin-expedition');if(begin)begin.disabled=!S.ready;
     for(const type of Object.keys(C.towers)){const b=$('tower-'+type);if(b){b.classList.toggle('active',type===S.build);b.setAttribute('aria-pressed',String(type===S.build));}}
     const t=S.towers.find(t=>t.site===S.selected),st=t?C.stats(t.type,t.level):null;$('selection').hidden=!t||S.over;
-    $('selected-title').textContent=t?`${st.name} · Level ${t.level}`:'Choose a tower';$('selected-info').textContent=t?`${Math.round(st.damage)} damage · ${Math.round(st.range)} range${t.level===3?' · Max level':''}`:'';
+    $('selected-title').textContent=t?`${st.name} · Level ${t.level}`:'Choose a tower';$('selected-info').textContent=t?`${Math.ceil(t.hp)} / ${t.maxHp} health · ${Math.round(st.damage)} damage · ${Math.round(st.range)} range${t.level===3?' · Max level':''}`:'';
     $('upgrade').textContent=t&&t.level<3?`Upgrade · ${st.upgrade} ◆`:t?'Max level':'Upgrade';$('upgrade').disabled=!t||t.level>=3||S.gold<st.upgrade||S.over;
+    $('repair').disabled=!t||t.hp>=t.maxHp||S.gold<20||S.over;$('repair').textContent='Repair +85 HP · 20 ◆';
     $('sell').textContent=t?`Sell · ${st.sell} ◆`:'Sell';$('sell').disabled=!t||S.over;
     for(let i=0;i<12;i++){const b=$('site-'+i);if(!b)continue;const tower=S.towers.find(t=>t.site===i);b.classList.toggle('occupied',!!tower);b.classList.toggle('selected',i===S.selected);b.setAttribute('aria-label',`Site ${i+1}: ${tower?C.towers[tower.type].name:'empty; build '+C.towers[S.build].name}`);b.disabled=S.over||!S.ready;}
   }
@@ -37,7 +38,7 @@
     const focusWasAnswer=$('live-answers').contains(document.activeElement)||document.activeElement===$('next-question');
     $('question-topic').textContent=q.mathGrade!==undefined?`${q.mathGrade===0?"Kindergarten":"Grade "+q.mathGrade} · ${q.standard||q.mathConcept||"Math"} · ${q.mathLevel}`:q.topic;$('question-count').textContent='QUESTION '+questionSerial;$('question-prompt').textContent=q.prompt;const model=MathModels.render(q)||ElementaryMathModels.render(q);$('question-model').replaceChildren(...(model?[model]:[]));
     $('answer-feedback').textContent='';$('answer-feedback').className='answer-feedback';$('next-question').hidden=true;
-    const choices=$('live-answers');choices.replaceChildren();shuffle([0,1,2,3]).forEach((original,i)=>{const b=button('',()=>answer(original,b),'live-answer');b.dataset.choice=String(original);b.append(el('span',String(i+1),'answer-number'),el('span',q.choices[original],'answer-text'));choices.append(b);});
+    const choices=$('live-answers');choices.classList.toggle('compact',q.choices.every(choice=>choice.length<=14));choices.replaceChildren();shuffle([0,1,2,3]).forEach((original,i)=>{const b=button('',()=>answer(original,b),'live-answer');b.dataset.choice=String(original);b.append(el('span',String(i+1),'answer-number'),el('span',q.choices[original],'answer-text'));choices.append(b);});
     if(focusWasAnswer)choices.firstElementChild?.focus({preventScroll:true});refresh();requestAnimationFrame(()=>S.resize());
   }
   function answer(value,chosen){
@@ -58,13 +59,13 @@
     'Answer the question at the bottom. A correct answer gives firing time to ALL towers and 25 gold. The next question appears automatically.',
     'The firing reserve holds up to 36 seconds. It only drains while enemies are within tower range. With no charge, towers stop shooting and enemies advance more slowly to give you time to think.',
     'Wrong answers show the correct answer and explanation, without giving firing time. Read it, then continue. Pause & read stops combat and the question countdown.',
-    'Two starter towers are free in every realm. Spend gold on more towers or upgrades. Ranger fires quickly, Arcane slows enemies, and Cannon deals splash damage.',
-    'Waves continue automatically. Defend six waves per realm, including a boss. Your firing reserve resets between realms, so keep studying throughout the campaign.',
-    'Use 1–4 to answer. Q/W/E select towers. Space pauses. Menu contains teacher tools, difficulty, sound, and the reward-per-correct-answer setting.'
+    'Two starter towers are free in every realm. Spend gold on more towers or upgrades. Arrows fire quickly, Arcane slows enemies, Cannon deals splash damage, Catapult hits distant groups, and Frost applies a longer slow.',
+    'Waves continue automatically. Defend six waves in each of six realms, including bosses. Larger enemies mark towers with orange warnings before firing. Select a damaged tower to repair 85 health for 20 gold; fallen sites rebuild for half price. Your firing reserve resets between realms, so keep studying throughout the campaign.',
+    'Use 1–4 to answer. Q/W/E/R/T select the five defenses. Space pauses. Menu contains teacher tools, difficulty, sound, and the reward-per-correct-answer setting.'
   ].forEach(text=>list.append(el('li',text)));show([el('span','THE SCHOLAR’S FIELD GUIDE','eyebrow'),el('h2','Knowledge is your ammunition.'),list,button(fromIntro?'Begin expedition →':'Return to battle →',fromIntro?beginExpedition:close,'primary wide')]);}
   function end(won){
-    const final=won&&S.level===2,stats=el('div',undefined,'stat-grid');[[S.correct,'correct answers'],[S.answered,'questions answered'],[S.kills,'monsters stopped']].forEach(([value,label])=>{const d=el('div');d.append(el('strong',String(value)),el('small',label));stats.append(d);});
-    show([el('span',won?'KNOWLEDGE HELD THE LINE':'RECHARGE AND TRY AGAIN','eyebrow'),el('h2',final?'The archive is safe.':won?C.maps[S.level].name+' defended.':'The archive fell.'),el('p',final?'You defended all three realms. Your correct answers powered every shot.':won?'Your answers powered every shot. Keep studying in the next realm.':'Build near the route, keep answering to refill the firing reserve, and use Pause & read when you need more time.'),stats,button(won&&!final?'Travel to next realm →':'Start a new expedition →',()=>{modal.close();if(won&&!final){S.next();renderQuestion();}else S.reset();KDAudio.duck(false);},'primary wide')]);
+    const final=won&&S.level===C.maps.length-1,stats=el('div',undefined,'stat-grid');[[S.correct,'correct answers'],[S.answered,'questions answered'],[S.kills,'monsters stopped']].forEach(([value,label])=>{const d=el('div');d.append(el('strong',String(value)),el('small',label));stats.append(d);});
+    show([el('span',won?'KNOWLEDGE HELD THE LINE':'RECHARGE AND TRY AGAIN','eyebrow'),el('h2',final?'The archive is safe.':won?C.maps[S.level].name+' defended.':'The archive fell.'),el('p',final?'You defended all six realms. Your correct answers powered every shot.':won?'Your answers powered every shot. Keep studying in the next realm.':'Build near the route, keep answering to refill the firing reserve, and use Pause & read when you need more time.'),stats,button(won&&!final?'Travel to next realm →':'Start a new expedition →',()=>{modal.close();if(won&&!final){S.next();renderQuestion();}else S.reset();KDAudio.duck(false);},'primary wide')]);
   }
   function openTeacher(){syncCourse();if(modal.open)return;if(settings.open)closeMenu();S.blocked=true;KDAudio.duck(true);$('frequency').value=String(S.powerReward);$('difficulty').value=S.difficulty;renderList();loadEditor(0);teacher.showModal();}
   function closeTeacher(){teacher.close();S.blocked=S.over||modal.open;KDAudio.duck(S.blocked);refresh();$('menu-open').focus();}
@@ -93,9 +94,9 @@
   teacher.addEventListener('input',e=>{if(e.target.id!=='class-link')invalidateClassLink();});
   teacher.addEventListener('click',e=>{if(e.target.closest('#apply-course,#generate-bank,#delete-question,#editor button'))invalidateClassLink();});
   syncCourse();
-  for(const [type,t]of Object.entries(C.towers)){const b=button('',()=>S.choose(type),'tower-card');b.id='tower-'+type;b.title=t.name+' · '+t.detail+' · '+t.cost+' gold';b.setAttribute('aria-label',b.title);const info=el('span');info.append(el('b',{archer:'Ranger',mage:'Arcane',cannon:'Cannon'}[type]));b.append(portrait({archer:'ranger',mage:'mage',cannon:'cannon'}[type]),info,el('span',t.cost+' ◆','cost'));$('tower-cards').append(b);}
+  for(const [type,t]of Object.entries(C.towers)){const b=button('',()=>S.choose(type),'tower-card');b.id='tower-'+type;b.title=t.name+' · '+t.detail+' · '+t.cost+' gold';b.setAttribute('aria-label',b.title);const info=el('span');info.append(el('b',{archer:'Arrows',mage:'Arcane',cannon:'Cannon',catapult:'Catapult',frost:'Frost'}[type]));b.append(portrait({archer:'ranger',mage:'mage',cannon:'cannon',catapult:'catapult',frost:'mage'}[type]),info,el('span',t.cost+' ◆','cost'));$('tower-cards').append(b);}
   for(let i=0;i<12;i++){const b=button(String(i+1),()=>S.selectSite(i));b.id='site-'+i;$('sites').append(b);}
-  $('start').onclick=S.startWave;$('upgrade').onclick=S.upgrade;$('sell').onclick=S.sell;
+  $('start').onclick=S.startWave;$('upgrade').onclick=S.upgrade;$('sell').onclick=S.sell;$('repair').onclick=S.repair;
   function pause(){S.paused=!S.paused;refresh();}$('pause').onclick=pause;$('reading-pause').onclick=pause;
   $('next-question').onclick=()=>{if(locked)renderQuestion();};
   $('speed').onclick=()=>{S.speed=S.speed===1?2:1;refresh();};$('help').onclick=()=>help();$('teacher').onclick=openTeacher;$('close-teacher').onclick=closeTeacher;
@@ -114,7 +115,7 @@
     if(e.key==='Escape'){sitesOpen(false);S.selected=-1;S.redraw();refresh();}
     if(e.repeat)return;
     if(['1','2','3','4'].includes(e.key)){e.preventDefault();$('live-answers').children[Number(e.key)-1]?.click();}
-    if(['q','w','e'].includes(e.key.toLowerCase()))S.choose(['archer','mage','cannon'][['q','w','e'].indexOf(e.key.toLowerCase())]);
+    if(['q','w','e','r','t'].includes(e.key.toLowerCase()))S.choose(['archer','mage','catapult','frost','cannon'][['q','w','e','r','t'].indexOf(e.key.toLowerCase())]);
     if(e.code==='Space'&&!/BUTTON/.test(e.target.tagName)){e.preventDefault();pause();}
   });
   let hintTimer;const hintChanged=()=>{$('hint-toast').classList.remove('faded');clearTimeout(hintTimer);hintTimer=setTimeout(()=>$('hint-toast').classList.add('faded'),3500);};new MutationObserver(hintChanged).observe($('hint'),{childList:true,characterData:true,subtree:true});hintChanged();

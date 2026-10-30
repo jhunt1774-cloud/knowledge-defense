@@ -18,15 +18,15 @@ window.KDArt={
     }
   },
   tower(scene,type,level,x,y){
-    const key={archer:'ranger',mage:'mage',cannon:'cannon'}[type];
-    const sprite=scene.add.image(x,y+9,key,level-1).setOrigin(.5,1);
-    this.sizeTower(sprite,type,level);return sprite;
+    const key={archer:'ranger',mage:'mage',cannon:'cannon',catapult:'catapult',frost:'mage'}[type];
+    const sprite=scene.add.image(x,y+9,key,type==='catapult'?0:level-1).setOrigin(.5,1);
+    this.sizeTower(sprite,type,level);if(type==='frost')sprite.setTint(0x99dfff);return sprite;
   },
   sizeTower(sprite,type,level){
     const heights={archer:[106,117,128],mage:[112,125,138],cannon:[90,103,116]};
-    const h=heights[type][level-1];sprite.setScale(h/sprite.frame.height);sprite.setDepth(100+sprite.y);
+    const h=(heights[type]||[100,112,124])[level-1];sprite.setScale(h/sprite.frame.height);sprite.setDepth(100+sprite.y);
   },
-  upgrade(sprite,type,level){sprite.setFrame(level-1);this.sizeTower(sprite,type,level);},
+  upgrade(sprite,type,level){sprite.setFrame(type==='catapult'?0:level-1);this.sizeTower(sprite,type,level);},
   unit(scene,key,frame,x,y,boss){
     const sprite=scene.add.image(x,y,key,frame).setOrigin(.5,.88);
     const height=boss?100:key==='brute'?64:52;sprite.setScale(height/sprite.frame.height);return sprite;
