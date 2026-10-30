@@ -17,16 +17,10 @@ window.KDArt={
       for(const [i,rect]of (asset.frames||[]).entries())texture.add(i,0,...rect);
     }
   },
-  tower(scene,type,level,x,y){
-    const key={archer:'ranger',mage:'mage',cannon:'cannon',catapult:'catapult',frost:'mage'}[type];
-    const sprite=scene.add.image(x,y+9,key,type==='catapult'?0:level-1).setOrigin(.5,1);
-    this.sizeTower(sprite,type,level);if(type==='frost')sprite.setTint(0x99dfff);return sprite;
-  },
-  sizeTower(sprite,type,level){
-    const heights={archer:[106,117,128],mage:[112,125,138],cannon:[90,103,116]};
-    const h=(heights[type]||[100,112,124])[level-1];sprite.setScale(h/sprite.frame.height);sprite.setDepth(100+sprite.y);
-  },
-  upgrade(sprite,type,level){sprite.setFrame(type==='catapult'?0:level-1);this.sizeTower(sprite,type,level);},
+  tower(scene,type,level,x,y){const a=this.towerAsset(type,level),sprite=scene.add.image(x,y+9,a.key,a.frame).setOrigin(.5,1);this.sizeTower(sprite,type,level);if(type==='frost')sprite.setTint(0x99dfff);return sprite;},
+  towerAsset(type,level=1){const extra={ballista:0,venom:1,storm:2,solar:3,catapult:4};return extra[type]!==undefined?{key:'arsenal',frame:extra[type]}:{key:{archer:'ranger',mage:'mage',cannon:'cannon',frost:'mage'}[type],frame:level-1};},
+  sizeTower(sprite,type,level){const heights={archer:[106,117,128],mage:[112,125,138],cannon:[90,103,116],catapult:[68,76,84]};const h=(heights[type]||[100,112,124])[level-1];sprite.setScale(h/sprite.frame.height);sprite.setDepth(100+sprite.y);},
+  upgrade(sprite,type,level){sprite.setFrame(this.towerAsset(type,level).frame);this.sizeTower(sprite,type,level);},
   unit(scene,key,frame,x,y,boss){
     const sprite=scene.add.image(x,y,key,frame).setOrigin(.5,.88);
     const height=boss?100:key==='brute'?64:52;sprite.setScale(height/sprite.frame.height);return sprite;

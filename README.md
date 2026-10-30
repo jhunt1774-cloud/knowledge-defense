@@ -1,4 +1,6 @@
-# Knowledge Defense · Siege edition v5
+RPG appearance update (v6.5): the approved catapult mechanism and all collision geometry are unchanged. Generated painterly oak, hammered iron, aged brass and crimson leather textures are applied to the rig surfaces. Flush iron reinforcement, rivets, heraldry and carved runes decorate the existing surfaces. The three tiers are Oak Siege Engine, Warded Catapult and Ember War Machine. The renderer adds soft grounding shadows, consistent lighting and higher-resolution antialiasing, with a lighter mode on lower-memory devices. The full-swing clearance checks, 27 weapon/upgrade checks and the new appearance/resize checks passed.
+
+# Knowledge Defense · Arsenal edition v6.5
 
 A separate, offline-capable Phaser 3 math review game. Forest Path is unchanged. No login, backend, or save is required.
 
@@ -12,19 +14,30 @@ Every correct answer adds firing time (12 seconds by default) and 25 gold. The r
 
 Bramblewood Ruins, Moonstone Causeway, The Ember Rift, The Sunken Garden, Amber Dunes, and Frostwatch Pass each have a different route and twelve tower sites. The three added realms have original garden, desert, and snowy terrain with routes that match the actual enemy paths. Each realm has six waves and a boss. Castle health restores to 20 when entering the next realm.
 
-## Five defenses
+## Progressive weapon unlocks
 
-- Q: Arrow tower — fast single-target shots; 70 gold.
-- W: Arcane spire — magic damage and a two-second slow; 100 gold.
-- E: Catapult — long range, heavy stones, and an 85-unit splash radius; 155 gold.
-- R: Frost beacon — ice bolts and a four-second slow; 110 gold.
-- T: Ember cannon — faster close-range splash; 120 gold.
+| Realm | Newly available defenses |
+|---|---|
+| 1 · Bramblewood Ruins | Arrow tower and Arcane spire |
+| 2 · Moonstone Causeway | Catapult and Ember cannon |
+| 3 · The Ember Rift | Frost beacon and Piercing ballista |
+| 4 · The Sunken Garden | Alchemist poison launcher |
+| 5 · Amber Dunes | Storm obelisk |
+| 6 · Frostwatch Pass | Solar prism |
 
-Choose a defense and click an empty numbered platform. Each tower has three upgrade levels. Select a built tower to see its health, damage, range, upgrade, repair, and sell controls. Repairs restore up to 85 health for 20 gold. Upgrades increase maximum health and restore the gained health. Two starter towers are free in each realm.
+Previously unlocked weapons remain available. The defense bar contains only available weapons and shows what comes next. On smaller screens swipe the bar to reach later weapons. Menu → Weapon progression shows all nine weapons and their upgrade ammunition. Starting a new expedition resets progression.
 
-Bosses can fire at towers. Armored brutes begin doing this from the fourth wave of the first realm; later realms introduce them earlier, and some raiders become ranged attackers. Orange target rings and lines give an attack warning before a projectile launches. Pause freezes the warning. Tower health bars appear when damaged. A fallen platform has a rebuild mark; rebuilding there costs half the chosen tower's normal price. Repair, rebuild, and upgrades use gold earned through studying and combat.
+## Moving mechanisms and distinct ammunition
 
-Use 1–4 for answers, Q/W/E/R/T for defenses, and Space to pause. The Sites button provides numbered keyboard-accessible building controls. Menu includes sound, music, speed, fullscreen, help, and teacher tools.
+The catapult uses separately illustrated chassis and arm sprites. Its arm draws back, releases the loaded stone from the cup, then returns to rest. Stones follow an elevated arc to the aimed impact point. Animation and flight obey Pause & read. Upgraded catapults launch a granite boulder, a spiked siege stone, then a flaming meteor.
+
+All nine weapons have three ammunition/beam designs with different geometry. Other upgrade paths include feather/broadhead/triple-fin arrows; rune orb/orbiting ring/arcane star; ice shard/twin lance/snowflake; iron cannonball/explosive shell/incendiary bomb; heavy/barbed/trident ballista bolts; poison vial/acid flask/toxic globe; spark/forked lightning/chain crown; and sun ray/twin prism rays/radiant solar beam.
+
+Impact animations are specific to the weapon: stone debris and a ground crater, explosion plumes, ice splinters, poison clouds and bubbles, arcane hexagons, lightning branches, solar rays, and arrow or bolt fragments. Ballista upgrades pierce one/two/three targets, poison inflicts damage over time, lightning chains to nearby enemies, and sunbeams damage enemies along their line. Existing range, damage, health and reload upgrades remain.
+
+Select a built tower to upgrade, sell, or repair it. Repairs restore up to 85 health for 20 gold. A destroyed platform rebuilds for half price. Orange warnings announce enemy shots. Correct answers still provide the firing time and gold required for defense.
+
+Use 1–4 to answer, Q/W/E/R/T for arrows/magic/catapult/frost/cannon, and Space to pause. Later weapons can be selected from the defense bar or with keyboard focus. Menu includes the full Weapon progression guide.
 
 ## Math and teacher tools
 
@@ -40,10 +53,10 @@ Students open the named assignment and begin. Fresh-generator links select a cur
 
 ## GitHub Pages deployment
 
-Extract Knowledge-Defense-Siege-v5.zip. Upload the files and folders inside it to your separate Knowledge Defense repository, keeping index.html at the repository root. Include src, data, vendor, assets and all four CSS files. Do not upload the ZIP itself or an extra enclosing folder. In repository Settings → Pages, publish from the root of your chosen branch. After publishing, refresh with Ctrl+Shift+R. If the browser upload fails, commit assets first, vendor second, then the remaining files. No runtime file exceeds 1.2 MB. Bundled Phaser and artwork require no CDN.
+Extract Knowledge-Defense-Arsenal-v6-5.zip. Upload the files and folders inside it to your separate Knowledge Defense repository, keeping index.html at the repository root. Include src, data, vendor, assets and all four CSS files. Do not upload the ZIP itself or an extra enclosing folder. In repository Settings → Pages, publish from the root of your chosen branch. After publishing, refresh with Ctrl+Shift+R. If the browser upload fails, commit assets first, vendor second, then the remaining files. No runtime file exceeds 1.2 MB. Bundled Phaser and artwork require no CDN.
 
 Optional existing MP3 overrides in assets/audio can remain; local sound effects and music work without them. Audio begins after the initial play gesture and can be controlled from Menu.
 
 ## Verification and sources
 
-Run npm test for core checks. With the optional Playwright development dependency installed, npm run test:browser, npm run test:classroom, npm run test:siege, and npm run test:campaign exercise the browser game. The campaign check uses simulated elapsed battle time and real question controls, with 80% correct answers, ordinary earned gold, and a fixed build/repair strategy. It is not a human usability study. The siege check verifies real projectile splash, slow effects, enemy telegraphs, damage, destruction, repairs, rebuilding, six routes and responsive layouts. Source hashes for unchanged reused teaching modules are in data/REUSE-SOURCES.json.
+Run npm test for core checks. With the optional Playwright development dependency installed, npm run test:browser, npm run test:classroom, npm run test:siege, npm run test:arsenal, and npm run test:campaign exercise the browser game. The campaign check uses simulated elapsed battle time and real question controls, with 80% correct answers, ordinary earned gold, and a fixed build/repair strategy. It is not a human usability study. The siege check verifies real projectile splash, slow effects, enemy telegraphs, damage, destruction, repairs, rebuilding, six routes and responsive layouts. Source hashes for unchanged reused teaching modules are in data/REUSE-SOURCES.json.

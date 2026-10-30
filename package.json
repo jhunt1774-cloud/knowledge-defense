@@ -1,6 +1,6 @@
 {
   "name": "knowledge-defense",
-  "version": "5.0.0",
+  "version": "6.5.0",
   "private": true,
   "description": "A standalone Phaser 3 computer science review tower defense game",
   "scripts": {
@@ -10,7 +10,11 @@
     "test:fullscreen": "node tests/study.cjs",
     "test:campaign": "node tests/campaign.cjs",
     "test:classroom": "node tests/classroom.cjs",
-    "test:siege": "node tests/siege.cjs"
+    "test:siege": "node tests/siege.cjs",
+    "test:arsenal": "node tests/arsenal.cjs",
+    "test:catapult": "node tests/catapult-direction.cjs",
+    "test:catapult-solid": "node tests/catapult-solid.cjs",
+    "test:catapult-rpg": "node tests/catapult-rpg.cjs"
   },
   "devDependencies": {
     "playwright": "1.64.1"

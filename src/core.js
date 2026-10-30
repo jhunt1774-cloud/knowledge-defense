@@ -1,11 +1,15 @@
 (function(root){
   'use strict';
   const towers={
-    archer:{name:'Ranger tower',symbol:'➶',cost:70,range:165,damage:17,rate:.65,color:0xbada86,detail:'Fast arrows · single target'},
-    mage:{name:'Arcane spire',symbol:'✧',cost:100,range:150,damage:24,rate:1.1,color:0xe5a4d5,detail:'Magic bolts · slows enemies'},
-    catapult:{name:'Siege catapult',symbol:'⌁',cost:155,range:240,damage:64,rate:2.8,color:0xd9b77b,detail:'Long-range stones · wide splash',health:220},
-    frost:{name:'Frost beacon',symbol:'❄',cost:110,range:165,damage:18,rate:1.2,color:0x9ddfff,detail:'Ice bolts · strong slow',health:180},
-    cannon:{name:'Ember cannon',symbol:'◉',cost:120,range:140,damage:32,rate:1.7,color:0xf0ba72,detail:'Explosive shots · area damage'}
+    archer:{unlock:0,name:'Ranger tower',symbol:'➶',cost:70,range:165,damage:17,rate:.65,color:0xbada86,detail:'Fast arrows · single target'},
+    mage:{unlock:0,name:'Arcane spire',symbol:'✧',cost:100,range:150,damage:24,rate:1.1,color:0xe5a4d5,detail:'Magic bolts · slows enemies'},
+    catapult:{unlock:1,name:'Siege catapult',symbol:'⌁',cost:155,range:240,damage:64,rate:2.8,color:0xd9b77b,detail:'Long-range stones · wide splash',health:220},
+    frost:{unlock:2,name:'Frost beacon',symbol:'❄',cost:110,range:165,damage:18,rate:1.2,color:0x9ddfff,detail:'Ice bolts · strong slow',health:180},
+    ballista:{unlock:2,name:'Piercing ballista',symbol:'➹',cost:145,range:220,damage:44,rate:1.45,color:0xd4bd80,health:220,detail:'Heavy bolts · upgraded bolts pierce'},
+    venom:{unlock:3,name:'Alchemist launcher',symbol:'⚗',cost:150,range:170,damage:15,rate:1.7,color:0x92db70,health:190,detail:'Poison flasks · damage over time'},
+    storm:{unlock:4,name:'Storm obelisk',symbol:'ϟ',cost:185,range:180,damage:36,rate:1.55,color:0x9bdcff,health:210,detail:'Chain lightning · strikes nearby enemies'},
+    solar:{unlock:5,name:'Solar prism',symbol:'☀',cost:210,range:245,damage:55,rate:1.9,color:0xffdf86,health:220,detail:'Sunbeam · burns enemies along a line'},
+    cannon:{unlock:1,name:'Ember cannon',symbol:'◉',cost:120,range:140,damage:32,rate:1.7,color:0xf0ba72,detail:'Explosive shots · area damage'}
   };
   function curve(nodes,steps=22){const result=[];for(let i=0;i<nodes.length-1;i++){const a=nodes[Math.max(0,i-1)],b=nodes[i],c=nodes[i+1],d=nodes[Math.min(nodes.length-1,i+2)];for(let n=0;n<steps;n++){const t=n/steps,t2=t*t,t3=t2*t;result.push([0,1].map(k=>.5*((2*b[k])+(-a[k]+c[k])*t+(2*a[k]-5*b[k]+4*c[k]-d[k])*t2+(-a[k]+3*b[k]-3*c[k]+d[k])*t3)));}}result.push(nodes.at(-1).slice());return result;}
   const maps=[
@@ -20,7 +24,7 @@
   ];
   for(const m of newRealms){const path=curve(m.control),candidates=[];for(let y=90;y<=445;y+=35)for(let x=110;x<=1090;x+=35){const distance=Math.min(...path.map(([px,py])=>Math.hypot(x-px,y-py)));if(distance>=62&&distance<=118)candidates.push([x,y]);}const sites=[];while(sites.length<12){candidates.sort((a,b)=>{const score=p=>sites.length?Math.min(...sites.map(q=>Math.hypot(p[0]-q[0],p[1]-q[1]))):1200-p[0];return score(b)-score(a);});sites.push(candidates.shift());}maps.push({...m,path,sites,starter:[0,2],color:0x496055,accent:0x647854,drawRoad:true});}
   const study={maxCharge:36,defaultReward:12,goldReward:25,feedbackMs:1100,wrongFeedbackMs:3200,unchargedSpeed:.38};
-  function stats(type,level=1){const t=towers[type];return {...t,health:(t.health||190)+70*(level-1),damage:t.damage*(1+.6*(level-1)),range:t.range+12*(level-1),rate:t.rate/(1+.13*(level-1)),upgrade:Math.round(t.cost*(.75+.35*level)),sell:Math.floor((t.cost+Array.from({length:level-1},(_,i)=>Math.round(t.cost*(.75+.35*(i+1)))).reduce((a,b)=>a+b,0))*.65)};}
+  function stats(type,level=1){const t=towers[type];return {...t,name:type==='catapult'?['Oak Siege Engine','Warded Catapult','Ember War Machine'][level-1]:t.name,health:(t.health||190)+70*(level-1),damage:t.damage*(1+.6*(level-1)),range:t.range+12*(level-1),rate:t.rate/(1+.13*(level-1)),upgrade:Math.round(t.cost*(.75+.35*level)),sell:Math.floor((t.cost+Array.from({length:level-1},(_,i)=>Math.round(t.cost*(.75+.35*(i+1)))).reduce((a,b)=>a+b,0))*.65)};}
   function waveSpec(level,wave,difficulty='standard'){const factor={relaxed:.72,standard:1,expert:1.3}[difficulty]||1;return {count:5+wave*2+Math.min(level,3)*2,hp:Math.round((38+wave*12+(Math.min(level,2)+Math.max(0,level-2)*.35)*26)*factor),speed:45+wave*3+Math.min(level,3)*4,interval:Math.max(.48,1-wave*.065),boss:wave===6};}
   function pathInfo(points){let lengths=[],total=0;for(let i=1;i<points.length;i++){const d=Math.hypot(points[i][0]-points[i-1][0],points[i][1]-points[i-1][1]);lengths.push(d);total+=d;}return {points,lengths,total};}
   function position(path,distance){let d=Math.max(0,distance);for(let i=0;i<path.lengths.length;i++){if(d<=path.lengths[i]){const t=d/path.lengths[i],a=path.points[i],b=path.points[i+1];return {x:a[0]+(b[0]-a[0])*t,y:a[1]+(b[1]-a[1])*t};}d-=path.lengths[i];}const p=path.points.at(-1);return {x:p[0],y:p[1]};}
