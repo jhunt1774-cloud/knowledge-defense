@@ -9,6 +9,21 @@
       "file": "math-models.js",
       "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-08\\referenced-chatgpt-conversation-this-is-an\\outputs\\forest-path\\math-models.js",
       "sha256": "2feb4d6e9fb86fac93023296fe04baa5019d78de2f37edd5eb82e9ffd435d4a3"
+    },
+    {
+      "file": "math-generator.js",
+      "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-08\\referenced-chatgpt-conversation-this-is-an\\outputs\\forest-path\\math-generator.js",
+      "sha256": "dca7238744aec4e351204cba45670220413fbc164d55a4073748d8441439e979"
+    },
+    {
+      "file": "grade-one-math.js",
+      "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-23\\referenced-chatgpt-conversation-this-is-an-2\\outputs\\Grade-1-Reusable-Math\\grade-one-math.js",
+      "sha256": "48163c918caa19ba8dc9a8cacfc3c771495634f0b93527d5207fec8d204cd30e"
+    },
+    {
+      "file": "elementary-models.js",
+      "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-23\\referenced-chatgpt-conversation-this-is-an-2\\outputs\\Grade-1-Reusable-Math\\math-models.js",
+      "sha256": "3e1b5f1f05bd910ccaa0e82bf25d085e47aeaaf5361bb91de0e4d8c3ca366fdb"
     }
   ],
   "mathBankQuestions": {

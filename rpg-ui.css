@@ -14,3 +14,14 @@
 @media(max-width:700px){.study-mode .question-tray{padding:9px 12px}.study-mode .question-scroll{max-height:125px;gap:8px}.study-mode .persistent-question{font-size:15px}.study-mode #question-model{flex-basis:43%}.study-mode .math-model svg{height:95px}.study-mode .live-answer{font-size:12px}.study-mode dialog{padding:16px}.study-mode .curriculum-panel .row{flex-wrap:wrap}.study-mode .math-model table{font-size:10px}}
 @media(max-height:500px) and (min-width:701px){.study-mode .question-scroll{max-height:76px}.study-mode .math-model svg{height:68px}.study-mode .persistent-question{font-size:13px}.study-mode .live-answer{font-size:12px}}
 .study-mode dialog{color-scheme:light}.study-mode dialog .row button:hover,.study-mode dialog .toolbar button:hover{background:#735336;color:#fff0ca}.study-mode dialog button:disabled{color:#786346;background:#d7c29c;opacity:.8}.study-mode .question-scroll:focus-visible{outline:2px solid #8c662c}
+
+/* Read the problem first, then compare the choices immediately beneath it. */
+.study-mode .review-inner{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto 34px;gap:9px;max-width:1200px}
+.study-mode .review-header,.study-mode .question-scroll,.study-mode .live-answers,.study-mode .review-footer{grid-column:1}
+.study-mode .question-scroll{width:100%;min-height:45px;max-height:140px;justify-content:center;align-items:center;padding:2px 8px}
+.study-mode .persistent-question{flex:0 1 auto;max-height:none;text-align:left;font-size:18px}
+.study-mode .live-answers{height:auto;min-height:90px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.study-mode .live-answer{min-height:40px}.study-mode #question-model{max-width:290px;flex:0 0 230px}.study-mode .math-model svg{height:118px}
+.study-mode #class-link{word-break:break-all}.study-mode #try-class-link{color:#5b4523;text-decoration:underline;align-self:center}.study-mode #class-link-message{font-size:13px;color:#584122}
+@media(max-width:700px){.study-mode .review-inner{grid-template-rows:auto auto auto auto;gap:7px}.study-mode .question-scroll{max-height:150px;min-height:40px;padding:0;gap:8px}.study-mode .persistent-question{font-size:15px}.study-mode #question-model{flex:0 0 43%;max-width:180px}.study-mode .math-model svg{height:100px}.study-mode .review-footer{height:auto}.study-mode .live-answer{min-height:42px}}
+@media(max-height:500px) and (min-width:701px){.study-mode .review-inner{gap:4px;grid-template-rows:auto auto auto 26px}.study-mode .question-scroll{max-height:76px;min-height:28px}.study-mode .persistent-question{font-size:13px}.study-mode .live-answers{min-height:60px}.study-mode .live-answer{min-height:28px;padding:4px 8px}.study-mode .math-model svg{height:65px}.study-mode .review-footer{height:26px}}

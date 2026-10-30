@@ -16,7 +16,7 @@
       const choices=q.choices.map(v=>str(v,'choice',500));
       if(new Set(choices).size!==4)fail('choices must be different.');
       if(!Number.isInteger(q.answer)||q.answer<0||q.answer>3)fail('answer must be an integer 0, 1, 2, or 3.');
-      const metadata={};for(const key of ['standard','mathGrade','mathLevel','mathFormat','generatorVersion','origin','subject','source','standardMeta','mathModel'])if(q[key]!==undefined)metadata[key]=JSON.parse(JSON.stringify(q[key]));
+      const metadata={};for(const key of ['standard','mathGrade','mathLevel','mathFormat','generatorVersion','origin','subject','source','standardMeta','mathModel','visual','mathConcept'])if(q[key]!==undefined)metadata[key]=JSON.parse(JSON.stringify(q[key]));
       return {...metadata,topic:str(q.topic||'Math','topic',100),prompt:str(q.prompt,'prompt',2000),choices,answer:q.answer,explanation:str(q.explanation,'explanation',2000)};
     });
   }

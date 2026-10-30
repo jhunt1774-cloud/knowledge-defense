@@ -1,6 +1,6 @@
 {
   "name": "knowledge-defense",
-  "version": "2.0.0",
+  "version": "4.0.0",
   "private": true,
   "description": "A standalone Phaser 3 computer science review tower defense game",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "node --test tests/core.test.cjs",
     "test:browser": "node tests/study.cjs",
     "test:fullscreen": "node tests/study.cjs",
-    "test:campaign": "node tests/campaign.cjs"
+    "test:campaign": "node tests/campaign.cjs",
+    "test:classroom": "node tests/classroom.cjs"
   },
   "devDependencies": {
     "playwright": "1.64.1"
