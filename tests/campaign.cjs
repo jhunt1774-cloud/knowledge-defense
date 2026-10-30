@@ -1,7 +1,7 @@
 const{chromium}=require('playwright'),assert=require('node:assert/strict'),path=require('path');
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'}),page=await browser.newPage({viewport:{width:1366,height:768}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.goto('file:///'+path.resolve(process.env.KD_GAME_ROOT||path.join(__dirname,'..'),'index.html').replace(/\\/g,'/'));await page.waitForFunction(()=>KD.ready);await page.getByRole('button',{name:'Begin expedition →',exact:true}).click();
-async function answer(ok){if(await page.locator('#next-question').isVisible())await page.locator('#next-question').click();const prompt=await page.locator('#question-prompt').textContent(),choice=await page.evaluate(({prompt,ok})=>{const q=KDUI.getBank().find(q=>q.prompt===prompt);return ok?q.answer:(q.answer+1)%4;},{prompt,ok});await page.locator(`.live-answer[data-choice="${choice}"]`).click();}
+async function answer(ok){if(await page.locator('#next-question').isVisible())await page.locator('#next-question').click();const prompt=await page.locator('#question-prompt').textContent(),choice=await page.evaluate(({prompt,ok})=>{const q=KDUI.getCurrentQuestion();return ok?q.answer:(q.answer+1)%4;},{prompt,ok});await page.locator(`.live-answer[data-choice="${choice}"]`).click();}
 const cadence=Number(process.env.KD_ANSWER_SECONDS||10);const log=[];let replies=0,lastRealm=-1;
 while(replies<260){
  let status=await page.evaluate(()=>({level:KD.level,over:KD.over,lives:KD.lives,wave:KD.wave,correct:KD.correct,answered:KD.answered,charge:KD.fireTime,kills:KD.kills}));

@@ -1,0 +1,10 @@
+/* Adapter for the unchanged Forest Path math engine and question collections. */
+(()=>{'use strict';
+ const M=MiddleSchoolMath;let config={source:'math',grade:6,level:'practice',skill:''},recent=[];
+ const normalize=q=>QuestionBank.validate([q])[0];
+ function codes(c=config){return Object.keys(M.plans).filter(k=>M.plans[k].grade===Number(c.grade)&&(!c.skill||k===c.skill));}
+ function collection(c=config){let raw=c.source==='cs'?KD_SAMPLE_QUESTIONS:c.source==='forest'?KD_FOREST_BANK:(KD_MATH_LIBRARY[c.grade]||[]).filter(q=>(!c.skill||q.standard===c.skill)&&q.mathLevel===c.level);if(!raw.length)throw Error('No questions match this selection.');return raw.map(normalize);}
+ function fresh(c=config){const skills=codes(c);if(!skills.length)throw Error('Choose a skill in the selected grade.');for(let n=0;n<60;n++){const code=skills[Math.floor(Math.random()*skills.length)],formats=M.plans[code].formats,format=formats[Math.floor(Math.random()*formats.length)],q=normalize({...M.build(code,format,c.level,Math.random),standard:code,mathGrade:Number(c.grade),mathLevel:c.level,mathFormat:format,generatorVersion:4,origin:"Original Ohio middle-school practice"});const key=q.prompt+JSON.stringify(q.mathModel||null);if(!recent.includes(key)){recent.push(key);if(recent.length>100)recent.shift();return q;}}return collection(c)[0];}
+ function set(c){if(!['math','math-bank','forest','cs','custom'].includes(c.source)||![6,7,8].includes(Number(c.grade))||!['support','practice','challenge'].includes(c.level))throw Error('Invalid curriculum selection.');if(c.skill&&!codes({...c,skill:''}).includes(c.skill))throw Error('Skill does not match grade.');config={...c,grade:Number(c.grade)};recent=[];return config.source==='custom'?null:collection();}
+ window.KDCurriculum={get config(){return {...config};},codes,collection,fresh,set,next(){return config.source==='math'&&Math.random()<.7?fresh():null;},generate(count=30){const out=[];for(let i=0;i<count;i++)out.push(fresh());return out;}};
+})();

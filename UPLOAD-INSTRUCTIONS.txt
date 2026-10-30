@@ -1,7 +1,7 @@
 KNOWLEDGE DEFENSE — GITHUB UPLOAD PACKAGE
 
 1. Extract this ZIP on your computer.
-2. Open the extracted folder. You should see index.html, style.css, fullscreen.css, review.css, src, data, vendor, and assets.
+2. Open the extracted folder. You should see index.html, style.css, fullscreen.css, review.css, rpg-ui.css, src, data, vendor, and assets.
 3. In your separate Knowledge Defense repository on GitHub, choose Add file > Upload files.
 4. Drag the FILES AND FOLDERS INSIDE the extracted folder into GitHub. Keep src, data, vendor, and assets as folders. Do not upload the ZIP itself or add another enclosing folder.
 5. Wait until all files finish uploading, then click Commit changes once.
@@ -10,7 +10,7 @@ If GitHub still gives Commit failed, upload in smaller groups:
 A. Upload the assets folder and commit.
 B. Upload the vendor folder and commit.
 C. Upload src, data, index.html, style.css, fullscreen.css, review.css, icon.svg, LICENSE, art-gallery.html, and this instructions file; commit.
-After Pages finishes deploying, press Ctrl+Shift+R to reload the website. Review.css and fullscreen.css must be included. Sound and background music start after Begin expedition; use Menu for mute and volume.
+After Pages finishes deploying, press Ctrl+Shift+R to reload the website. All four CSS files must be included, including rpg-ui.css. Sound and background music start after Begin expedition; use Menu for mute and volume.
 
 All game artwork is included. Full-resolution original PNGs are retained in the source artwork folder and are not required on GitHub for play. The former assets-bundle.js file is no longer referenced by this upload package; an old copy already in the repository can remain without affecting this edition.
 

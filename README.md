@@ -1,3 +1,13 @@
+# Knowledge Defense · Math RPG edition
+
+Start with Grade 6 math. Open Menu → Teacher tools to choose grades 6–8, a specific skill, Support/Practice/Challenge, or another collection. Click Use this collection. Math mixes the imported Forest Path questions with fresh numeric variants. Bank-only mode uses the imported problems.
+
+The unchanged Forest Path generator covers 80 skills; 1,600 math questions and 196 computing/web questions are bundled. Forest Path itself was not modified. These are original practice questions, not official assessment items. Review content for your class.
+
+Use Create 30 fresh problems for editing to make a fixed bank. Editing/importing switches to the editable bank. JSON and CSV exports preserve diagrams and metadata (CSV uses an optional metadata column); classroom packs also retain curriculum and combat settings. Standard eight-column CSV files still import. Forest Path JSON files import directly.
+
+Parchment questions, brass frames, and wooden menus match the fantasy maps. The battlefield stays full width above continuous review. Graphs and tables appear beside their question; longer content scrolls within the question area.
+
 # Knowledge Defense — Study Edition
 
 A standalone Phaser 3 computer-science review game. **Answering questions powers the defense.** Questions remain at the bottom of the screen, one after another, while the battle runs above. No login, backend, analytics, saved progress, or asset CDN is required. Forest Path is a separate project and was not changed.

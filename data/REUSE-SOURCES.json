@@ -1,0 +1,21 @@
+{
+  "modules": [
+    {
+      "file": "middle-school-math.js",
+      "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-08\\referenced-chatgpt-conversation-this-is-an\\outputs\\forest-path\\middle-school-math.js",
+      "sha256": "5f6064668db8cdc59ea71dbad9d7485d9c1905ecb8950e68a175b11f63326f0d"
+    },
+    {
+      "file": "math-models.js",
+      "source": "C:\\Users\\jhunt\\Documents\\Codex\\2026-10-08\\referenced-chatgpt-conversation-this-is-an\\outputs\\forest-path\\math-models.js",
+      "sha256": "2feb4d6e9fb86fac93023296fe04baa5019d78de2f37edd5eb82e9ffd435d4a3"
+    }
+  ],
+  "mathBankQuestions": {
+    "6": 580,
+    "7": 460,
+    "8": 560
+  },
+  "forestComputingQuestions": 196,
+  "note": "Copied for Knowledge Defense. Source project unchanged. Original program practice, not official test items."
+}
